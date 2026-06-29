@@ -1,0 +1,11 @@
+{
+  "name": "chase-ai",
+  "description": "Chase AI's skill pack for Claude Code. Ships loop-engineer — an interview-driven loop-engineering architect.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Chase AI"
+  },
+  "homepage": "https://github.com/cth9191/chase-ai-skills",
+  "repository": "https://github.com/cth9191/chase-ai-skills",
+  "keywords": ["loop-engineering", "agentic", "automation", "claude-code"]
+}

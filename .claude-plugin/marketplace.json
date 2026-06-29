@@ -1,0 +1,17 @@
+{
+  "$schema": "https://code.claude.com/schemas/marketplace.json",
+  "name": "chase-ai-plus",
+  "owner": {
+    "name": "Chase AI"
+  },
+  "description": "Claude Code skills for the Chase AI+ community.",
+  "plugins": [
+    {
+      "name": "chase-ai",
+      "source": "./plugins/chase-ai",
+      "description": "Chase AI's skill pack. Currently ships loop-engineer: an interview-driven loop-engineering architect that diagnoses a task, forces the success-criteria decision, and scaffolds a self-improving loop — or tells you it shouldn't be one.",
+      "keywords": ["loop-engineering", "agentic", "automation", "claude-code", "chase-ai"],
+      "category": "productivity"
+    }
+  ]
+}

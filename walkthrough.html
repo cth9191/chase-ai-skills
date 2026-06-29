@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>loop-engineer &mdash; example session</title>
+<style>
+  :root{
+    --bg:#16130f; --panel:#1f1a15; --panel2:#251f19; --line:#37302a;
+    --ink:#ece5d9; --dim:#a99b86; --terra:#e0794a; --terra-soft:#2a201a;
+    --you:#2b3a44; --you-line:#3d5563; --good:#9fd17a;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;line-height:1.55}
+  .wrap{max-width:860px;margin:0 auto;padding:32px 20px 80px}
+  header h1{font-size:26px;margin:0 0 4px}
+  header h1 .mono{color:var(--terra);font-family:ui-monospace,Menlo,Consolas,monospace}
+  header p{color:var(--dim);margin:0 0 6px}
+  .legend{font-size:13px;color:var(--dim);margin:14px 0 0}
+  .legend b{color:var(--terra)}
+
+  .phase{display:flex;align-items:center;gap:10px;margin:34px 0 14px}
+  .phase .dot{width:9px;height:9px;border-radius:50%;background:var(--terra)}
+  .phase .label{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--terra);font-weight:700}
+  .phase .rule{flex:1;height:1px;background:var(--line)}
+
+  .msg{display:flex;gap:12px;margin:14px 0}
+  .av{flex:0 0 34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;
+    font-size:13px;font-weight:700}
+  .av.bot{background:var(--terra);color:#16130f}
+  .av.you{background:var(--you-line);color:#dff0fb}
+  .bubble{flex:1;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:13px 16px}
+  .you .bubble{background:var(--you);border-color:var(--you-line)}
+  .who{font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px}
+  .bubble p{margin:7px 0}
+  .bubble p:first-of-type{margin-top:0}.bubble p:last-child{margin-bottom:0}
+
+  .rec{margin-top:10px;background:var(--terra-soft);border-left:3px solid var(--terra);
+    border-radius:6px;padding:8px 12px;font-size:14px}
+  .rec b{color:var(--terra)}
+  .qno{display:inline-block;background:var(--panel2);border:1px solid var(--line);color:var(--dim);
+    font-size:12px;border-radius:6px;padding:1px 8px;margin-bottom:6px;font-weight:600}
+  .tierwrap{margin-top:10px;border:1px solid var(--line);border-radius:8px;overflow:hidden;font-size:13px}
+  .tierwrap .row{display:flex;gap:10px;padding:7px 12px;border-bottom:1px solid var(--line)}
+  .tierwrap .row:last-child{border-bottom:0}
+  .tierwrap .t{flex:0 0 54px;color:var(--terra);font-weight:700}
+  .tierwrap .row.pick{background:var(--terra-soft)}
+  .tierwrap .row.pick .t{color:var(--good)}
+  code{background:#120f0c;border:1px solid var(--line);border-radius:4px;padding:1px 6px;
+    font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;color:#f0c9a6}
+
+  .spec{background:#100d0a;border:1px solid var(--terra);border-radius:12px;margin-top:8px;overflow:hidden}
+  .spec .bar{background:var(--terra);color:#16130f;font-weight:700;font-size:13px;padding:6px 14px;
+    font-family:ui-monospace,Menlo,Consolas,monospace}
+  .spec pre{margin:0;padding:14px 16px;white-space:pre-wrap;font-family:ui-monospace,Menlo,Consolas,monospace;
+    font-size:12.5px;line-height:1.6;color:#d8cdbd;max-height:none}
+  .spec pre .h{color:var(--terra);font-weight:700}
+  .spec pre .g{color:var(--good)}
+
+  .files{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+  .files .f{background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:5px 10px;
+    font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;color:#f0c9a6}
+  .stop{margin-top:8px;background:#241016;border:1px solid #7d3a4a;border-radius:8px;padding:10px 14px;font-size:14px}
+  .stop b{color:#e88}
+  footer{margin-top:40px;color:var(--dim);font-size:13px;text-align:center;border-top:1px solid var(--line);padding-top:18px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Running <span class="mono">/loop-engineer</span> &mdash; an example session</h1>
+    <p>What it actually feels like to loop-engineer a task with the skill. Scenario: a weekly LinkedIn-article loop.</p>
+    <p class="legend"><b>The flow:</b> Diagnose &rarr; grill one question at a time (each with a recommended answer) &rarr; write a blueprint &rarr; you sign off &rarr; it scaffolds only the rung you're ready for. It will tell you when something <b>shouldn't</b> be a loop.</p>
+  </header>
+
+  <!-- DIAGNOSE -->
+  <div class="phase"><span class="dot"></span><span class="label">1 &middot; Diagnose</span><span class="rule"></span></div>
+
+  <div class="msg you"><div class="av you">You</div><div class="bubble"><div class="who">You</div>
+    <p>Every week I want Claude to research AI news and write me a LinkedIn article that gets the most engagement possible. I've written a few by hand and they were decent. Loop engineer it so the articles get better over time.</p></div></div>
+
+  <div class="msg"><div class="av bot">LE</div><div class="bubble"><div class="who">loop-engineer</div>
+    <p>Before I build anything, let me place this on the maturity ladder &mdash; it decides what we actually do next.</p>
+    <p>You've written a few by hand and they were decent. But here's the catch I have to check: did you write them <em>yourself</em>, or did you do the full research&rarr;draft loop <em>with an AI</em> and get something you'd actually post?</p>
+    <div class="rec"><b>My read:</b> you're at the <b>rung&nbsp;0&rarr;1 boundary</b>. "Decent by hand" proves the task is possible &mdash; but not that an <em>agent</em> can do it to your bar. That gap is the whole game. Confirm which it is.</div>
+  </div></div>
+
+  <div class="msg you"><div class="av you">You</div><div class="bubble"><div class="who">You</div>
+    <p>Honestly I wrote them myself. I've never had Claude do the full thing end to end.</p></div></div>
+
+  <div class="msg"><div class="av bot">LE</div><div class="bubble"><div class="who">loop-engineer</div>
+    <p>Good &mdash; that's the most important answer in this whole session. We are <b>not</b> building a loop yet. Looping an unproven task just automates failure on a schedule.</p>
+    <p>Your real next move is one manual run. But I'll still grill you through the design now, so when the manual run passes you already know the loop you're building. Onward.</p>
+  </div></div>
+
+  <!-- GRILL -->
+  <div class="phase"><span class="dot"></span><span class="label">2 &middot; The grill &mdash; one question at a time</span><span class="rule"></span></div>
+
+  <div class="msg"><div class="av bot">LE</div><div class="bubble"><div class="who">loop-engineer &middot; Q1 &mdash; horizon</div>
+    <span class="qno">Q1 / is this even a loop?</span>
+    <p>Is this a <b>forever</b> task (every week, indefinitely) or a one-shot "make me one good article and stop"?</p>
+    <div class="rec"><b>Recommend: forever.</b> One-shot would just be <code>/goal</code> in a single session. The reason this is real loop engineering is the <em>self-improvement across weeks</em> &mdash; each article learns from the last.</div></div></div>
+  <div class="msg you"><div class="av you">You</div><div class="bubble"><div class="who">You</div><p>Forever &mdash; every Monday.</p></div></div>
+
+  <div class="msg"><div class="av bot">LE</div><div class="bubble"><div class="who">loop-engineer &middot; Q2 &mdash; trigger</div>
+    <span class="qno">Q2 / trigger phase</span>
+    <p>How does each run kick off?</p>
+    <div class="rec"><b>Recommend:</b> a scheduled routine, <code>Monday 08:00</code> &rarr; "run the linkedin-article skill." Simplest reliable trigger; cron or webhook is overkill here.</div></div></div>
+  <div class="msg you"><div class="av you">You</div><div class="bubble"><div class="who">You</div><p>Monday 8am routine works.</p></div></div>
+
+  <div class="msg"><div class="av bot">LE</div><div class="bubble"><div class="who">loop-engineer &middot; Q3 &mdash; execution</div>
+    <span class="qno">Q3 / execution phase</span>
+    <p>Is the work a skill yet? (Checked your vault &mdash; you have a <code>content-cascade</code> skill but no standalone weekly-article skill.)</p>
+    <div class="rec"><b>Recommend:</b> first artifact is a <code>linkedin-article</code> execution skill &mdash; research AI news, draft in your voice, a specific output a specific way. That's exactly what skills are for.</div></div></div>
+  <div class="msg you"><div class="av you">You</div><div class="bubble"><div class="who">You</div><p>Yeah, make it its own skill.</p></div></div>
+
+  <div class="msg"><div class="av bot">LE</div><div class="bubble"><div class="who">loop-engineer &middot; Q4 &mdash; success criteria <em>(the heart)</em></div>
+    <span class="qno">Q4 / verification &mdash; push hard here</span>
+    <p>This is the make-or-break. How do we know an article is <em>good</em>? Walk the ladder with me:</p>
+    <div class="tierwrap">
+      <div class="row"><span class="t">Tier 1</span><span>deterministic yes/no &mdash; doesn't exist for writing</span></div>
+      <div class="row"><span class="t">Tier 2</span><span>rule/constraint &mdash; "&ge;3 sources, &lt;1300 words" (cheap guardrail, not quality)</span></div>
+      <div class="row pick"><span class="t">Tier 3</span><span><b>a number &mdash; engagement (likes/comments).</b> Objective, but lagged + noisy</span></div>
+      <div class="row pick"><span class="t">Tier 4</span><span><b>a judge &mdash; an LLM scores craft pre-publish.</b> Needed because likes lag days</span></div>
+      <div class="row"><span class="t">Tier 5</span><span>human-only &mdash; you eyeball before it posts (we'll keep this as a gate)</span></div>
+    </div>
+    <div class="rec"><b>Recommend a hybrid: Tier 4 + Tier 3.</b> A craft-judge scores the draft <em>before</em> posting; real engagement recalibrates over time. And the judge must be a <b>different model than the writer</b> &mdash; if Claude writes it, Codex judges it. Models love their own work; self-judging is worthless.</div></div></div>
+  <div class="msg you"><div class="av you">You</div><div class="bubble"><div class="who">You</div><p>Codex as the judge, engagement as the long-term signal. Done.</p></div></div>
+
+  <div class="msg"><div class="av bot">LE</div><div class="bubble"><div class="who">loop-engineer &middot; Q5 &mdash; the trap most people miss</div>
+    <span class="qno">Q5 / measurement lag</span>
+    <p>One catch with engagement: likes arrive <em>days</em> after you post. So a single Monday loop can't both write and learn from real numbers in the same run.</p>
+    <div class="rec"><b>Recommend a second loop:</b> a daily scraper that pulls each post's engagement and backfills the state store. The Monday writer then reads <em>settled</em> numbers from prior weeks. Without this, the loop optimizes on data that isn't in yet.</div></div></div>
+  <div class="msg you"><div class="av you">You</div><div class="bubble"><div class="who">You</div><p>Didn't think of that. Add the scraper loop.</p></div></div>
+
+  <div class="msg"><div class="av bot">LE</div><div class="bubble"><div class="who">loop-engineer &middot; Q6 &mdash; state</div>
+    <span class="qno">Q6 / state &mdash; the self-improvement engine</span>
+    <p>Where does memory live, and what does each run read?</p>
+    <div class="rec"><b>Recommend:</b> a <code>state.json</code> logging per article &mdash; the angle, the hook, the CTA, the Codex score, and (backfilled) the real engagement. Each Monday the writer reads it first: "these hooks landed, these flopped &mdash; don't repeat the duds." That memory is the only thing separating a self-improving loop from 52 random shots a year.</div></div></div>
+  <div class="msg you"><div class="av you">You</div><div class="bubble"><div class="who">You</div><p>Perfect.</p></div></div>
+
+  <div class="msg"><div class="av bot">LE</div><div class="bubble"><div class="who">loop-engineer &middot; Q7 &mdash; stop rule + sanity gate</div>
+    <span class="qno">Q7 / stop rule &amp; honesty check</span>
+    <p>Two last things. A stop rule &mdash; and an honest gut-check on whether this should stay autonomous.</p>
+    <div class="rec"><b>Recommend:</b> keep a <b>human publish gate</b> (you approve before it posts &mdash; it's your name and reputation), plus a hard cap so a runaway research pass can't burn tokens. It's a loop, but a human-gated one. That's the right call for taste-driven, public-facing work.</div></div></div>
+  <div class="msg you"><div class="av you">You</div><div class="bubble"><div class="who">You</div><p>Agreed, I want the final say.</p></div></div>
+
+  <!-- BLUEPRINT -->
+  <div class="phase"><span class="dot"></span><span class="label">3 &middot; Blueprint &mdash; sign off before any code</span><span class="rule"></span></div>
+
+  <div class="msg"><div class="av bot">LE</div><div class="bubble"><div class="who">loop-engineer</div>
+    <p>Here's the spec. Nothing is built yet &mdash; this is where you catch a wrong call before it's baked in.</p>
+    <div class="spec"><div class="bar">LOOP-SPEC.md</div><pre><span class="h"># Loop Spec: weekly-linkedin-article</span>
+
+<span class="h">## Verdict: should this be a loop?</span>
+<span class="g">NOT YET</span> &mdash; the task is sound but UNVALIDATED with an AI (rung 0&rarr;1).
+Build the loop only after one manual run posts something you'd ship.
+
+<span class="h">## Maturity rung</span>
+Current: 0&rarr;1. Target this pass: prove it manually, then rung 1&rarr;2 (skill).
+
+<span class="h">## Four phases</span>
+- Trigger:      routine, Monday 08:00
+- Execution:    new `linkedin-article` skill (research &rarr; draft in voice)
+- Verification: Tier 4 + Tier 3 &mdash; Codex craft-judge pre-publish,
+                real engagement post-publish. Judge != writer.
+- State:        state.json &mdash; angle, hook, CTA, judge score, engagement
+                (backfilled). Writer reads it each run to avoid past duds.
+
+<span class="h">## Measurement lag</span>
+Second loop: daily scraper backfills engagement by post id.
+
+<span class="h">## Stop rule</span>
+Human publish gate (you approve) + hard cap on research iterations.
+
+<span class="h">## Open risks</span>
+- Likes are a NOISY proxy for quality &mdash; timing/topic can spike a weak post.
+  Don't let the loop treat a viral fluke as the gold standard.</pre></div>
+    <p style="margin-top:12px">On your go I'll scaffold <b>only the next rung</b>. Right now that's the manual run &mdash; not a single line of loop code.</p>
+    <div class="files">
+      <span class="f">MANUAL-RUN.md</span>
+    </div>
+    <div class="stop"><b>Why so little?</b> You're at rung 0. Scaffolding state + judges + scrapers now would be building a factory before proving you can make one part by hand. Pass the manual run, re-run me, and the next pass emits the <code>linkedin-article</code> skill &mdash; then the trigger &mdash; then the full loop. One rung at a time.</div>
+  </div></div>
+
+  <!-- SCAFFOLD (later) -->
+  <div class="phase"><span class="dot"></span><span class="label">4 &middot; Scaffold &mdash; later, once you've climbed</span><span class="rule"></span></div>
+
+  <div class="msg"><div class="av bot">LE</div><div class="bubble"><div class="who">loop-engineer (a few rungs later)</div>
+    <p>Once the manual run passes and the skill + trigger exist, the final pass emits the real loop &mdash; graduated, never all at once:</p>
+    <div class="files">
+      <span class="f">loops/linkedin-article/skill/SKILL.md</span>
+      <span class="f">trigger.md</span>
+      <span class="f">state.schema.json</span>
+      <span class="f">verify.md &middot; Codex judge</span>
+      <span class="f">scraper-loop.md</span>
+      <span class="f">stop.md</span>
+      <span class="f">README.md</span>
+    </div>
+    <p style="margin-top:10px;color:var(--dim)">&mdash; and the <code>README</code> explains every decision, so you can debug the loop instead of just owning it.</p>
+  </div></div>
+
+  <footer>
+    loop-engineer &middot; the value isn't generating a loop &mdash; it's the interview that stops you building the wrong one.
+  </footer>
+</div>
+</body>
+</html>
