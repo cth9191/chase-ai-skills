@@ -115,13 +115,4 @@ See [`walkthrough.html`](./walkthrough.html) for a full example session, start t
 
 ---
 
-## Background
-
-Companion to the video **"The Four Step Process to Loop Engineer ANYTHING (+ Why Prompt
-Engineering Isn't Dead)."** The video teaches the theory and walks the manual setup;
-this skill removes the manual labor and the decision paralysis — and wires the loop to
-actually run.
-
----
-
 © Chase AI. For use by Chase AI+ members. All rights reserved.
