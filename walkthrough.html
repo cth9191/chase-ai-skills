@@ -71,7 +71,7 @@
   <header>
     <h1>Running <span class="mono">/loop-engineer</span> &mdash; an example session</h1>
     <p>What it actually feels like to loop-engineer a task with the skill. Scenario: a weekly LinkedIn-article loop.</p>
-    <p class="legend"><b>The flow:</b> Diagnose &rarr; grill one question at a time (each with a recommended answer) &rarr; write a blueprint &rarr; you sign off &rarr; it scaffolds only the rung you're ready for. It will tell you when something <b>shouldn't</b> be a loop.</p>
+    <p class="legend"><b>The flow:</b> Diagnose &rarr; fast interview (each question with a recommended answer) &rarr; it <b>builds the complete runnable loop for your task</b> &mdash; skill, trigger, state, verification, stop rule, README. If your task is unproven, the loop's <b>first run is a validation gate</b>. It only refuses when something genuinely shouldn't be a loop.</p>
   </header>
 
   <!-- DIAGNOSE -->
@@ -90,8 +90,8 @@
     <p>Honestly I wrote them myself. I've never had Claude do the full thing end to end.</p></div></div>
 
   <div class="msg"><div class="av bot">LE</div><div class="bubble"><div class="who">loop-engineer</div>
-    <p>Good &mdash; that's the most important answer in this whole session. We are <b>not</b> building a loop yet. Looping an unproven task just automates failure on a schedule.</p>
-    <p>Your real next move is one manual run. But I'll still grill you through the design now, so when the manual run passes you already know the loop you're building. Onward.</p>
+    <p>Good &mdash; that's the most important answer in this session, and it changes <em>how</em> I build, not <em>whether</em> I build. You'll still get the full loop today.</p>
+    <p>Because the task is unproven, I'll bake a <b>validation gate</b> into it: the loop's <b>first run produces one article and stops for your thumbs-up</b> before it ever starts self-improving. That way it can't optimize on a task it hasn't proven it can do. Let me grab the few decisions I need, then build.</p>
   </div></div>
 
   <!-- GRILL -->
@@ -146,27 +146,27 @@
     <div class="rec"><b>Recommend:</b> keep a <b>human publish gate</b> (you approve before it posts &mdash; it's your name and reputation), plus a hard cap so a runaway research pass can't burn tokens. It's a loop, but a human-gated one. That's the right call for taste-driven, public-facing work.</div></div></div>
   <div class="msg you"><div class="av you">You</div><div class="bubble"><div class="who">You</div><p>Agreed, I want the final say.</p></div></div>
 
-  <!-- BLUEPRINT -->
-  <div class="phase"><span class="dot"></span><span class="label">3 &middot; Blueprint &mdash; sign off before any code</span><span class="rule"></span></div>
+  <!-- BUILD -->
+  <div class="phase"><span class="dot"></span><span class="label">3 &middot; Build &mdash; the complete loop, now</span><span class="rule"></span></div>
 
   <div class="msg"><div class="av bot">LE</div><div class="bubble"><div class="who">loop-engineer</div>
-    <p>Here's the spec. Nothing is built yet &mdash; this is where you catch a wrong call before it's baked in.</p>
+    <p>That's everything I need. Building the construct into <code>loops/linkedin-article/</code> now &mdash; here's the spec it's baked from, shown as I write the files (no sign-off gate, it's all going in):</p>
     <div class="spec"><div class="bar">LOOP-SPEC.md</div><pre><span class="h"># Loop Spec: weekly-linkedin-article</span>
 
-<span class="h">## Verdict: should this be a loop?</span>
-<span class="g">NOT YET</span> &mdash; the task is sound but UNVALIDATED with an AI (rung 0&rarr;1).
-Build the loop only after one manual run posts something you'd ship.
+<span class="h">## Verdict: is this a loop?</span>
+<span class="g">YES &mdash; building it.</span> Recurring weekly + a definable success signal.
+Task is UNVALIDATED, so run #1 is a validation gate (below).
 
 <span class="h">## Maturity rung</span>
-Current: 0&rarr;1. Target this pass: prove it manually, then rung 1&rarr;2 (skill).
+Current: 0&rarr;1. Validation gate baked into run #1; optimizes after.
 
 <span class="h">## Four phases</span>
 - Trigger:      routine, Monday 08:00
 - Execution:    new `linkedin-article` skill (research &rarr; draft in voice)
 - Verification: Tier 4 + Tier 3 &mdash; Codex craft-judge pre-publish,
                 real engagement post-publish. Judge != writer.
-- State:        state.json &mdash; angle, hook, CTA, judge score, engagement
-                (backfilled). Writer reads it each run to avoid past duds.
+- State:        state.json &mdash; validated:false, then angle, hook, CTA,
+                judge score, engagement (backfilled). Read each run.
 
 <span class="h">## Measurement lag</span>
 Second loop: daily scraper backfills engagement by post id.
@@ -177,28 +177,26 @@ Human publish gate (you approve) + hard cap on research iterations.
 <span class="h">## Open risks</span>
 - Likes are a NOISY proxy for quality &mdash; timing/topic can spike a weak post.
   Don't let the loop treat a viral fluke as the gold standard.</pre></div>
-    <p style="margin-top:12px">On your go I'll scaffold <b>only the next rung</b>. Right now that's the manual run &mdash; not a single line of loop code.</p>
-    <div class="files">
-      <span class="f">MANUAL-RUN.md</span>
-    </div>
-    <div class="stop"><b>Why so little?</b> You're at rung 0. Scaffolding state + judges + scrapers now would be building a factory before proving you can make one part by hand. Pass the manual run, re-run me, and the next pass emits the <code>linkedin-article</code> skill &mdash; then the trigger &mdash; then the full loop. One rung at a time.</div>
-  </div></div>
-
-  <!-- SCAFFOLD (later) -->
-  <div class="phase"><span class="dot"></span><span class="label">4 &middot; Scaffold &mdash; later, once you've climbed</span><span class="rule"></span></div>
-
-  <div class="msg"><div class="av bot">LE</div><div class="bubble"><div class="who">loop-engineer (a few rungs later)</div>
-    <p>Once the manual run passes and the skill + trigger exist, the final pass emits the real loop &mdash; graduated, never all at once:</p>
+    <p style="margin-top:12px">Written &mdash; the full runnable construct:</p>
     <div class="files">
       <span class="f">loops/linkedin-article/skill/SKILL.md</span>
       <span class="f">trigger.md</span>
       <span class="f">state.schema.json</span>
+      <span class="f">state.json &middot; validated:false</span>
       <span class="f">verify.md &middot; Codex judge</span>
       <span class="f">scraper-loop.md</span>
       <span class="f">stop.md</span>
       <span class="f">README.md</span>
     </div>
-    <p style="margin-top:10px;color:var(--dim)">&mdash; and the <code>README</code> explains every decision, so you can debug the loop instead of just owning it.</p>
+    <div class="stop"><b>The validation gate:</b> run #1 (next Monday) researches + drafts <em>one</em> article, then stops and asks you "ship-worthy? y/n." Only on yes does <code>validated</code> flip to true and the loop start trusting its own scores. You get the whole machine today &mdash; it just proves itself once before it self-improves.</div>
+  </div></div>
+
+  <!-- RUN -->
+  <div class="phase"><span class="dot"></span><span class="label">4 &middot; Run it</span><span class="rule"></span></div>
+
+  <div class="msg"><div class="av bot">LE</div><div class="bubble"><div class="who">loop-engineer</div>
+    <p>Done. Kick it off now with <code>/linkedin-article</code>, or let Monday's trigger fire it. The <code>README</code> explains every decision &mdash; the tiers, the judge, the lag scraper &mdash; so you can debug the loop, not just run it.</p>
+    <p style="color:var(--dim)">No theory homework, no "come back later." You described a task; you walked away with the loop.</p>
   </div></div>
 
   <footer>

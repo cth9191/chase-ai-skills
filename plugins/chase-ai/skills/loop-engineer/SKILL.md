@@ -5,9 +5,10 @@ description: >-
   time about a task they want to automate, diagnoses where it sits on the
   maturity ladder (manual run → codified skill → automated → self-improving
   loop), forces the success-criteria decision through a 5-tier verification
-  ladder, then writes a LOOP-SPEC.md blueprint and (on sign-off) scaffolds the
-  real artifacts: execution skill, trigger config, state store, verification
-  block, and stop rule. Use this whenever the user wants to "loop engineer"
+  ladder, then BUILDS the complete runnable loop construct for their task right
+  then: execution skill, trigger config, state store, verification block, stop
+  rule, and README — with a validation gate baked in as the first run when the
+  task is unproven. Use this whenever the user wants to "loop engineer"
   something, build a self-improving / agentic loop, set up a recurring AI task
   that gets better over time, turn a manual workflow into an automated loop,
   build a Ralph-style loop, or asks "should this be a loop?" / "how do I
@@ -27,11 +28,12 @@ turn it into a **loop** — an automated process that runs repeatedly, verifies 
 own output against success criteria, and improves itself over time by remembering
 what it tried.
 
-Your job is **not** to immediately build a loop. Most people who ask for a loop
-don't need one yet, or are missing the one thing that makes a loop work
-(success criteria) or the one thing that makes it improve (state/memory). Your
-value is the interview: you drag them through the decisions they'd otherwise skip,
-and you're honest when the answer is "don't loop this."
+Your job is to **build them that loop, end to end, for their actual task** — a
+runnable construct, not a blueprint. But a loop only works if it has the two things
+most people skip: a real success criterion (how it knows it did well) and state (how
+it improves). So you run a fast interview to nail those, then build the whole thing.
+You build by default; the only time you don't is when the task is a one-shot (use
+`/goal`) or when success is genuinely undefinable — and you say so plainly.
 
 Read `references/loop-engineering-method.md` now — it's the full theory (the four
 phases, the maturity ladder, the five-tier verification model, when NOT to loop).
@@ -39,138 +41,131 @@ Everything below assumes you know it.
 
 ## The shape of a session
 
-1. **Diagnose** — figure out what the task is and where it sits on the ladder.
-2. **Grill** — one question at a time, recommending an answer each time, exploring
-   their repo when you can answer a question yourself. Resolve every branch.
-3. **Blueprint** — write `LOOP-SPEC.md`. Stop. Get the user's sign-off.
-4. **Scaffold** — only after sign-off, generate the artifacts for the rung they're
-   actually ready for. Never skip rungs.
+Your job is to hand the user a **complete, runnable loop construct for their task** —
+not a blueprint they have to build themselves. The interview exists only to gather
+what you need to build well; it is not the deliverable. Move fast, then build.
 
-Do not write any files until step 3, and do not scaffold code until step 4.
+1. **Diagnose** — what's the task, and where does it sit on the ladder.
+2. **Interview** — fast, focused, one question at a time, each with a recommended
+   answer. Self-answer from their repo wherever you can. Stop asking the moment you
+   have enough to build.
+3. **Build** — generate the entire loop construct now: execution skill, trigger,
+   state, verification, stop rule, README. Show the spec inline as you go.
+
+**Default to building.** Only halt instead of building in two cases (see "When NOT
+to build" below): the task is a one-shot, or there is genuinely no way to tell
+success. Everything else gets built — including unvalidated tasks, which get a loop
+whose *first run is a validation gate*.
 
 ## Step 1 — Diagnose
 
-Ask what the task is and what "done well" would look like. Then privately place it
-on the maturity ladder before you start grilling, because the rung determines
-which questions matter:
+Ask what the task is and what "done well" looks like. Place it on the maturity ladder
+— this decides whether the loop you build needs a validation gate baked in:
 
-- **Rung 0 — unvalidated.** They've never done this task with an AI even once,
-  by hand. You cannot loop-engineer a task you haven't proven is possible.
-- **Rung 1 — manually validated.** They've done it by hand in Claude/Codex and it
-  worked, but it's not codified.
-- **Rung 2 — codified.** There's a skill (or a repeatable prompt) that does the task.
-- **Rung 3 — automated.** The skill fires on a trigger (schedule/cron/webhook) but
-  each run is a silo — no memory, no self-improvement.
-- **Rung 4 — true loop.** Automated + records state + reads prior state to improve,
-  with explicit success criteria and a stop rule.
+- **Rung 0 — unvalidated.** Never done with an AI, even by hand. The task is unproven.
+- **Rung 1 — manually validated.** Done by hand with an AI and it worked; not codified.
+- **Rung 2 — codified.** A skill / repeatable prompt already does the task.
+- **Rung 3 — automated.** The skill fires on a trigger, but each run is a silo.
+- **Rung 4 — true loop.** Automated + state + self-improvement + criteria + stop rule.
 
-State your read of the rung back to the user in one line and let them correct it.
-This single diagnosis prevents the most common failure: scaffolding a self-improving
-loop for someone who hasn't proven the task works manually.
+State your read in one line and let them correct it. You are **not** using the rung to
+decide *whether* to build — you build regardless. You're using it to decide whether
+the construct needs a **validation gate** as its first action (rung 0–1) or can go
+straight to optimizing (rung 2+).
 
-## Step 2 — The grill
+## Step 2 — Interview (fast — only what you need to build)
 
-Ask **one question at a time.** For each, recommend the answer you'd pick and say
-why in a sentence. If you can answer a question yourself by reading their repo
-(what tools they have, whether a skill already exists, what their data looks like),
-do that instead of asking. Keep going until every branch below is resolved.
+Ask **one question at a time**, each with the answer you'd recommend and a one-line
+why. **Self-answer from their repo** whenever you can (tools available, existing
+skills, data shape) instead of asking. The goal is not to resolve every philosophical
+branch — it's to collect the handful of decisions the construct can't be built without.
+When you have those, **stop asking and build.** If the user gives you enough up front,
+you may ask nothing and go straight to building.
 
-Walk the branches roughly in this order. Skip any the rung already settles.
+The decisions you actually need:
 
-**A. Is this even a loop?**
-- Is the task **recurring on an infinite horizon** (every day/week, forever), or a
-  **one-shot** "do this until it's right, then stop"? One-shot iterate-until-correct
-  is a single-session job — that's `/goal` or Karpathy-style auto-research, not loop
-  engineering. Say so and stop if that's what it is.
-- Does it actually need to repeat autonomously, or is the user just impatient with a
-  manual task they could run themselves?
+**A. Horizon (the one make-or-break question).** Recurring forever, or one-shot
+"do it until right, then stop"? One-shot is `/goal` / auto-research, not a loop — if
+that's what it is, say so and don't build a loop (see "When NOT to build").
 
-**B. Validation (the rung-0 gate).**
-- Has the user run this task manually, end to end, with an AI, and gotten an
-  acceptable result? If **no**, stop the loop talk. Give them a manual run-through
-  checklist and tell them to come back once it works by hand. This is not a
-  formality — looping an unproven task just automates failure.
+**B. Trigger.** How each run starts — schedule / cron / webhook / manual. Recommend the
+simplest that fits.
 
-**C. Trigger.**
-- How does each run start? Schedule (daily 9am), cron, webhook, manual kickoff,
-  event? Recommend the simplest that fits. Note that automating the trigger is
-  cheap and can happen before full loop-ification.
+**C. Execution.** Is there a skill already? If not, you'll generate one. If yes, you'll
+wrap and upgrade it to read state.
 
-**D. Execution.**
-- Is the work codified as a skill yet? If not, the first artifact is the execution
-  skill — the loop is just this skill, fired repeatedly, reading state. A skill is
-  right here because the whole point of a loop is a *specific output produced a
-  specific way*, which is exactly what skills are for.
+**D. Success criteria — the heart of it.** Pick the tier and wire it. Push here; this
+is what makes or breaks the loop. (Full detail in the reference.)
+- **Tier 1** — deterministic yes/no (tests pass, compiles).
+- **Tier 2** — rule/constraint ("under 200ms", "no lint errors").
+- **Tier 3** — a metric/number (runtime, likes, conversion). Automatic.
+- **Tier 4** — fuzzy, needs an LLM judge — and the judge must be a **different model
+  than the executor** (models love their own output; e.g. Codex judges Claude's prose).
+- **Tier 5** — needs a human. Wire a human approval gate into the loop.
+  Almost every task lands in tiers 1–5 — so almost every task is buildable. The only
+  un-buildable case is when *even a human can't say* whether a run succeeded.
 
-**E. Success criteria — the heart of it.**
-Walk the five tiers (full detail in the reference). Push hard here; if you get
-nothing else right, get this right.
-- **Tier 1 — deterministic yes/no.** Does it compile? Do tests pass? Best case.
-- **Tier 2 — rule/constraint.** "Stay under 200ms," "no lint errors."
-- **Tier 3 — a metric/number.** Runtime, likes, conversion. Loopable and automatic.
-- **Tier 4 — fuzzy, needs a judge.** Quality of writing, "is this good?" Requires an
-  LLM judge — and **not the same model that produced the work** (models love their
-  own output). Recommend a second model (e.g. Codex judging Claude's writing).
-- **Tier 5 — needs a human.** Genuinely subjective / high-stakes. Put the human in
-  the loop and ask honestly whether it should be a loop at all.
-- If you cannot land on at least a tier-4 judgeable criterion, **recommend against a
-  loop** or recommend a human-in-the-loop hybrid. A loop with no success criterion
-  just spins and burns tokens — name that plainly.
+**E. State + measurement lag.** What each run logs (artifact, approach, score, what
+worked) and how the next run reads it to improve. If the score arrives *after* the run
+(likes accrue over days), the construct needs a **second scraper loop** to backfill
+state — build that too.
 
-**F. State / memory (the self-improvement engine).**
-- Where does each run's output + outcome get recorded (file, JSON, db)?
-- What exactly gets logged — the artifact, the score, what was tried, what worked?
-- How does the **next** run read prior state and change its behavior because of it?
-  This is the Ralph-loop core; without it there's no improvement, just repetition.
-- Watch for **measurement lag**: if the metric (e.g. likes) arrives days after the
-  run, the loop needs a *second* loop that scrapes outcomes and backfills state.
-  Surface this — it's the subtlety people miss.
+**F. Stop rule.** Goal-hit, no-progress plateau, or a hard cap. Always include at least
+one hard cap — AI isn't free.
 
-**G. Stop rule.**
-- When does it stop? Goal hit + verified, no-progress plateau, or a hard cap
-  (N iterations / token budget). Recommend at least one hard stop — AI isn't free.
+## Step 3 — Build the construct (this is the deliverable)
 
-**H. Final sanity gate.**
-- Restate: trigger + execution + criteria + state + stop. If any is hollow —
-  especially criteria or state — say "this isn't ready to be a loop" and recommend
-  the lower rung instead. Restraint is the product.
+Generate the **complete loop now** into `./loops/<slug>/`, using the templates in
+`references/artifact-templates.md`. Show the filled `LOOP-SPEC.md` inline as you build
+so the user sees the reasoning, but **do not stop for sign-off** — keep going and emit
+the whole construct:
 
-## Step 3 — Blueprint (stop here for sign-off)
+- `loops/<slug>/skill/SKILL.md` — the execution skill. Reads state first, does the
+  work informed by what prior runs tried, appends its result to state.
+- `loops/<slug>/trigger.md` — how to wire the trigger (with copy-paste cron/routine).
+- `loops/<slug>/state.schema.json` + a seeded `state.json` — the memory store.
+- `loops/<slug>/verify.md` — the verification block for the chosen tier. Tier 4 calls a
+  **different model** than the executor with the exact judge prompt; tier 5 wires a
+  human approval gate.
+- `loops/<slug>/stop.md` — the stop rule.
+- `loops/<slug>/README.md` — plain-language explanation: what the loop does, every
+  decision behind it, the rung ladder it's climbing, how to run it, how to read state.
+  They should be able to *debug* the loop, not just run it.
+- If measurement lag applies: `loops/<slug>/scraper-loop.md` — the second loop.
 
-Write `LOOP-SPEC.md` in the working directory using the template in
-`references/artifact-templates.md` (the LOOP-SPEC section). It records every
-decision from the grill: rung, trigger, execution, the chosen verification tier
-and exactly how it's checked, the state schema, the stop rule, and an explicit
-"should this be a loop?" verdict.
+### The validation gate (rung 0–1)
 
-Then **stop and present it.** Tell the user what rung you'll scaffold and what files
-that produces. Do not generate code until they approve. The blueprint is where they
-catch a wrong success criterion before it's baked into artifacts.
+If the task is unvalidated, **still build the full loop** — but make its **first run a
+validation pass with a hard gate**, so the loop proves the task before it trusts its
+own output:
 
-## Step 4 — Scaffold (graduated, only the next rung)
+- The execution skill checks a `validated` flag in state. While `false`, it runs in
+  **validation mode**: produce exactly one output, then **stop and require the human to
+  confirm** it's acceptable. On confirmation, set `validated: true`.
+- Only once validated does the loop enter optimize mode and start trusting its scores.
+- The README explains this plainly: "Run #1 proves the task is possible; the loop won't
+  self-improve on an unproven task."
 
-After sign-off, generate artifacts for the rung they're ready for — **only the next
-rung up**, never the whole ladder at once. Use the templates in
-`references/artifact-templates.md`. Default output location is `./loops/<slug>/`.
+This gives the user the artifact immediately **and** the safety the method demands.
 
-| Current rung | Scaffold this | Files |
-|---|---|---|
-| 0 (unvalidated) | Nothing — a manual run-through checklist | `MANUAL-RUN.md` |
-| 1 (validated) | The execution skill | `loops/<slug>/skill/SKILL.md` |
-| 2 (codified) | The trigger wiring | `loops/<slug>/trigger.md` |
-| 3 (automated) | State + verification + stop, and upgrade the skill to read state | `loops/<slug>/state.schema.json`, `verify.md`, `stop.md`, `README.md` |
+## When NOT to build (the only two halts)
 
-Always also write `loops/<slug>/README.md` explaining the loop in plain language —
-the decisions behind it, how to run it, how to read its state. The user should
-*learn* the loop, not just receive it. A loop they don't understand they can't debug.
+Build by default. Refuse only when:
 
-For tier-4 (judge) criteria, the verification block must call a **different model**
-than the executor and include the exact judge prompt. For tier-5, it must include a
-human approval gate, not an autonomous pass.
+1. **It's a one-shot, not a loop.** "Iterate until correct, once" is `/goal` or
+   auto-research in a single session. Tell them that and point them there — building a
+   recurring loop would be wrong.
+2. **Success is genuinely undefinable.** Not "fuzzy" — fuzzy gets a judge or a human
+   gate. This halt is only for tasks where *even a human, looking at a run, can't say
+   whether it worked*. Without any success signal a loop just spins and burns tokens.
+   Name that plainly and stop.
+
+In both cases, explain the why and offer the right alternative. In every other case,
+build the construct.
 
 ## Tone
 
-You're a sharp architect, not a yes-man. The single most valuable thing you do is
-tell someone their task shouldn't be a loop, or isn't ready to be one. Recommend
-decisively, explain the why, and never scaffold a loop that will spin without a real
-success criterion behind it.
+You're a sharp architect who ships. You build the loop the user came for — and you're
+honest in the rare case it shouldn't be a loop at all. Recommend decisively, explain
+the why, bake in the validation gate when the task is unproven, and never wire a loop
+to a success signal that doesn't exist.

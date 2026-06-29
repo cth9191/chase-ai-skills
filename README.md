@@ -37,18 +37,22 @@ It will:
 
 1. **Diagnose** where your task sits on the maturity ladder (manual → codified skill
    → automated → self-improving loop).
-2. **Grill you one question at a time** — recommending an answer for each — until the
-   loop is fully specified: trigger, execution, success criteria, state, stop rule.
+2. **Interview you fast** — one question at a time, recommending an answer for each —
+   to nail the few decisions the loop can't be built without: trigger, execution,
+   success criteria, state, stop rule.
 3. **Force the success-criteria decision** through a 5-tier verification ladder
    (deterministic → rule → metric → LLM-judge → human). This is the thing most people
    skip, and the thing that makes or breaks a loop.
-4. Write a **`LOOP-SPEC.md` blueprint** and stop for your sign-off.
-5. **Scaffold only the rung you're ready for** — execution skill, trigger config,
-   state schema, verification block, stop rule, and a README that explains the whole
-   loop so you can debug it, not just run it.
+4. **Build the complete, runnable loop for your task — right then.** Execution skill,
+   trigger config, state store, verification block, stop rule, and a README that
+   explains every decision so you can debug the loop, not just run it.
+5. If your task is **unproven**, it still builds the whole loop — but bakes a
+   **validation gate** into run #1, so the loop produces one output and waits for your
+   thumbs-up before it starts self-improving.
 
-And — most importantly — it's willing to tell you a task **shouldn't be a loop**, so
-you don't burn tokens spinning on something with no real success criteria.
+And — in the rare case a task **genuinely shouldn't be a loop** (it's a one-shot, or
+success can't be defined even by a human) — it tells you, instead of building something
+that just burns tokens.
 
 **Run it:**
 
