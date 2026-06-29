@@ -191,12 +191,34 @@ Human publish gate (you approve) + hard cap on research iterations.
     <div class="stop"><b>The validation gate:</b> run #1 (next Monday) researches + drafts <em>one</em> article, then stops and asks you "ship-worthy? y/n." Only on yes does <code>validated</code> flip to true and the loop start trusting its own scores. You get the whole machine today &mdash; it just proves itself once before it self-improves.</div>
   </div></div>
 
-  <!-- RUN -->
-  <div class="phase"><span class="dot"></span><span class="label">4 &middot; Run it</span><span class="rule"></span></div>
+  <!-- TEST + ACTIVATE -->
+  <div class="phase"><span class="dot"></span><span class="label">4 &middot; Test &amp; activate &mdash; make it live</span><span class="rule"></span></div>
 
   <div class="msg"><div class="av bot">LE</div><div class="bubble"><div class="who">loop-engineer</div>
-    <p>Done. Kick it off now with <code>/linkedin-article</code>, or let Monday's trigger fire it. The <code>README</code> explains every decision &mdash; the tiers, the judge, the lag scraper &mdash; so you can debug the loop, not just run it.</p>
-    <p style="color:var(--dim)">No theory homework, no "come back later." You described a task; you walked away with the loop.</p>
+    <p>Want me to <b>run it once now</b> so you can see what it produces before we schedule anything?</p></div></div>
+  <div class="msg you"><div class="av you">You</div><div class="bubble"><div class="who">You</div><p>Yeah, do a test run.</p></div></div>
+
+  <div class="msg"><div class="av bot">LE</div><div class="bubble"><div class="who">loop-engineer</div>
+    <p>[runs the validation pass &mdash; researches, drafts one article, shows it] &hellip; here's what it produced. This is the baseline.</p></div></div>
+  <div class="msg you"><div class="av you">You</div><div class="bubble"><div class="who">You</div><p>That's actually solid. Lock it in.</p></div></div>
+
+  <div class="msg"><div class="av bot">LE</div><div class="bubble"><div class="who">loop-engineer</div>
+    <p>Marked as your validated baseline. <b>Want me to wire it up to run on its own &mdash; and if so, how?</b></p>
+    <div class="tierwrap">
+      <div class="row"><span class="t">A</span><span><b>Claude Code routine</b> &mdash; simplest if you live in Claude Code; I create a scheduled routine.</span></div>
+      <div class="row"><span class="t">B</span><span><b>OS scheduler</b> &mdash; a real cron job / Windows Task running <code>claude -p "run the skill"</code>. Survives Claude Code being closed.</span></div>
+      <div class="row"><span class="t">C</span><span><b>Webhook / event</b> &mdash; if something other than a clock should kick it off.</span></div>
+      <div class="row"><span class="t">D</span><span><b>Leave it manual</b> &mdash; you run it yourself; nothing scheduled.</span></div>
+    </div></div></div>
+  <div class="msg you"><div class="av you">You</div><div class="bubble"><div class="who">You</div><p>Cron job. Monday mornings.</p></div></div>
+
+  <div class="msg"><div class="av bot">LE</div><div class="bubble"><div class="who">loop-engineer</div>
+    <p>Wired. Here's the deal in plain English:</p>
+    <div class="spec"><div class="bar">it's live</div><pre>Runs:    <span class="g">every Monday 08:00</span> (cron) + scraper every other day
+Stops:   judge &lt;7 after 3 revises, or engagement flat 6 weeks
+You:     approve at the publish gate &mdash; otherwise <span class="g">hands-off</span>
+Change:  edit trigger.md (cadence) or stop.md (when it ends)</pre></div>
+    <p style="color:var(--dim)">No theory homework, no "come back later." You described a task &mdash; you walked away with a running, self-improving loop.</p>
   </div></div>
 
   <footer>

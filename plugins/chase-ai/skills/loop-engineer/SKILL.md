@@ -8,7 +8,10 @@ description: >-
   ladder, then BUILDS the complete runnable loop construct for their task right
   then: execution skill, trigger config, state store, verification block, stop
   rule, and README — with a validation gate baked in as the first run when the
-  task is unproven. Use this whenever the user wants to "loop engineer"
+  task is unproven. Then it offers a test run and, once they're happy, asks whether
+  to wire it up to run on its own — cron, a Claude Code routine, an OS scheduled
+  task, or left manual — and sets up that trigger so the loop is actually live and
+  hands-off, not just a folder of files. Use this whenever the user wants to "loop engineer"
   something, build a self-improving / agentic loop, set up a recurring AI task
   that gets better over time, turn a manual workflow into an automated loop,
   build a Ralph-style loop, or asks "should this be a loop?" / "how do I
@@ -51,6 +54,9 @@ what you need to build well; it is not the deliverable. Move fast, then build.
    have enough to build.
 3. **Build** — generate the entire loop construct now: execution skill, trigger,
    state, verification, stop rule, README. Show the spec inline as you go.
+4. **Test & activate** — offer a test run so they see one real output, then ask if
+   they want it wired to run automatically and set up the trigger they pick. This is
+   what turns a folder of files into a live, hands-off automation.
 
 **Default to building.** Only halt instead of building in two cases (see "When NOT
 to build" below): the task is a one-shot, or there is genuinely no way to tell
@@ -147,6 +153,50 @@ own output:
   self-improve on an unproven task."
 
 This gives the user the artifact immediately **and** the safety the method demands.
+
+## Step 4 — Test & activate (don't skip this — it's what makes it hands-off)
+
+A folder of files isn't a loop. The user came for an automation that *runs*. Close the
+loop by getting them from "built" to "live."
+
+### 4a — Offer a test run
+Once the construct is written, offer to **run the loop once now** so they see a real
+output before committing to a schedule:
+
+> "Want me to run it once now so you can see what it produces?"
+
+If yes, execute the loop's first run (in validation mode if the task is unproven —
+that's the gate that asks them to confirm a baseline). Show them the output. Let them
+react. **Do not wire any automation until they're happy with what a run produces** —
+this is the "happy with the test" checkpoint.
+
+### 4b — Ask to wire it up, and offer the options
+When they're satisfied with the test, ask the question plainly — and lay out the
+trigger choices, because environments differ:
+
+> "Happy with that? Want me to wire it up to run on its own — and if so, how?
+> - **Claude Code routine / scheduled task** — simplest if you're inside Claude Code; I
+>   create a routine that runs the skill on your cadence.
+> - **OS scheduler** — a real cron job (mac/Linux) or Windows Task Scheduler entry that
+>   runs `claude -p \"run the <slug> skill\"` on schedule. Survives Claude Code being closed.
+> - **Webhook / event** — if a real-world event should kick it off instead of a clock.
+> - **Leave it manual** — you run it yourself when you want; nothing scheduled."
+
+Recommend the one that fits their setup (read their OS / whether they use Claude Code
+routines). **Wiring a schedule is a persistent, machine-level change — only do it on an
+explicit yes**, and confirm the exact cadence first.
+
+### 4c — On yes, actually set it up
+Create the trigger they chose — write the cron entry, register the scheduled task, or
+create the routine — using `trigger.md` as the spec. Then confirm in plain English what
+you just turned on, so the deal is unmistakable:
+
+> "Done. This now runs **<cadence>**. It **stops** when **<stop condition>**. It needs
+> **you** only at **<the gate, if any>** — otherwise it's hands-off. Edit `trigger.md`
+> to change the schedule, `stop.md` to change when it ends."
+
+That final recap is the point: they should walk away knowing exactly how often it runs,
+when it stops, and where (if anywhere) they're still in the loop.
 
 ## When NOT to build (the only two halts)
 

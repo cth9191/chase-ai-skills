@@ -117,19 +117,28 @@ Run the verification (see `../verify.md`), then append this run's result to stat
 
 Cadence: <e.g. daily 09:00>.
 
+> loop-engineer offers to wire ONE of these for you at the end (Step 4 — Activate).
+> Nothing is scheduled until you say yes and confirm the cadence.
+
 ## Option A — Claude Code routine / scheduled task
 Create a routine/automation that runs the `<slug>` skill on schedule. In the
 routine instructions, simply: "Run the <slug> skill." Set the schedule to <cadence>.
+Simplest if you live in Claude Code.
 
-## Option B — OS scheduler (portable)
-- macOS/Linux: cron entry — `0 9 * * *  cd <repo> && claude -p "run the <slug> skill"`
-- Windows: Task Scheduler task running the same command.
+## Option B — OS scheduler (portable, survives Claude Code being closed)
+- macOS/Linux cron: `0 9 * * *  cd <repo> && claude -p "run the <slug> skill"`
+- Windows Task Scheduler: a task on the same cadence running
+  `claude -p "run the <slug> skill"` with the working dir set to <repo>.
 
 ## Option C — Webhook / event
 <only if event-driven: describe the event and the handler that invokes the skill>
 
+## Option D — Manual
+Leave nothing scheduled; run `<slug>` yourself when you want. Fine while you're still
+tuning the loop.
+
 Pick the simplest that fits. Automating the trigger is independent of full
-loop-ification — you can do this before adding state/verification.
+loop-ification — you can wire it before or after adding state/verification.
 ```
 
 ---

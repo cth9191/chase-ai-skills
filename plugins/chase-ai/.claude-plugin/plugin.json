@@ -1,7 +1,7 @@
 {
   "name": "chase-ai",
   "description": "Chase AI's skill pack for Claude Code. Ships loop-engineer — an interview-driven loop-engineering architect.",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "author": {
     "name": "Chase AI"
   },
